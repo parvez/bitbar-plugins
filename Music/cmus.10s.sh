@@ -19,7 +19,7 @@ export PATH="/usr/local/bin:/usr/bin:/bin:$PATH"
 
 
 if [ "$1" = 'launch-iterm' ]; then
-  if [ $(osascript -e 'application "iTerm" is running') = "false" ]; then
+  if [ "$(osascript -e 'application "iTerm" is running')" = "false" ]; then
     osascript -e 'tell application "iTerm" to activate'
     osascript -e 'tell application "iTerm" to tell current session of current window to write text "cmus"'
   else
@@ -32,7 +32,7 @@ if [ "$1" = 'launch-iterm' ]; then
 fi
 
 if [ "$1" = 'launch-terminal' ]; then
-  if [ $(osascript -e 'application "Terminal" is running') = "false" ]; then
+  if [ "$(osascript -e 'application "Terminal" is running')" = "false" ]; then
     osascript -e 'tell application "Terminal" to activate'
     osascript -e 'tell application "Terminal" to do script "cmus" in window 1'
   else
@@ -44,14 +44,12 @@ if [ "$1" = 'launch-terminal' ]; then
   exit
 fi
 
-cmus-remote -C status > /dev/null 2>&1
-
-if [ $? -ne 0 ]; then
+if cmus-remote -C status > /dev/null 2>&1; then
   echo "♫"
   echo "---"
   echo "cmus is not running"
-  echo "Launch cmus in iTerm | bash=$0 param1=launch-iterm terminal=false refresh=true"
-  echo "Launch cmus in Terminal | bash=$0 param1=launch-terminal terminal=false refresh=true"
+  echo "Launch cmus in iTerm | bash='$0' param1=launch-iterm terminal=false refresh=true"
+  echo "Launch cmus in Terminal | bash='$0' param1=launch-terminal terminal=false refresh=true"
   exit
 fi
 
@@ -101,9 +99,9 @@ echo "Album: $album | color=#333333 length=40"
 echo "---"
 
 if [ "$state" = "playing" ]; then
-  echo "Pause | bash=$0 param1=playpause terminal=false refresh=true"
-  echo "Previous | bash=$0 param1=previous terminal=false refresh=true"
-  echo "Next | bash=$0 param1=next terminal=false refresh=true"
+  echo "Pause | bash='$0' param1=playpause terminal=false refresh=true"
+  echo "Previous | bash='$0' param1=previous terminal=false refresh=true"
+  echo "Next | bash='$0' param1=next terminal=false refresh=true"
 else
-  echo "Play | bash=$0 param1=playpause terminal=false refresh=true"
+  echo "Play | bash='$0' param1=playpause terminal=false refresh=true"
 fi

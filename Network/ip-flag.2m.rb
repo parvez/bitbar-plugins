@@ -8,7 +8,15 @@
 # <bitbar.dependencies>OS X 10.11</bitbar.dependencies>
 
 require 'open-uri'
+require 'json'
 
-country_code = open('http://ipinfo.io/country').string.chomp.split ''
-c1, c2 = *country_code.map { |c| (c.ord + 0x65).chr.force_encoding 'UTF-8' }
-puts "\xF0\x9F\x87#{c1}\xF0\x9F\x87#{c2}"
+begin
+  cc = JSON.load(open('http://ip-api.com/json'))
+  country_code = cc['countryCode'].chomp.split ''
+  c1, c2 = *country_code.map { |c| (c.ord + 0x65).chr.force_encoding 'UTF-8' }
+  puts "\xF0\x9F\x87#{c1}\xF0\x9F\x87#{c2}"
+rescue StandardError => err
+  puts "🚩"
+  puts "---"
+  puts err.to_s
+end

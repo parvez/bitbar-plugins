@@ -19,7 +19,7 @@ APPENDIX=""
 
 # user clicks on 'encoding'
 if [[ "$1" = "encode" ]]; then
-  $(echo -n "$(echo -n "${PREFIX}$(pbpaste)${APPENDIX}" | base64)" | pbcopy)
+  echo -n "$(echo -n "${PREFIX}$(pbpaste)${APPENDIX}" | base64)" | pbcopy
   osascript -e "display notification \"Clipboard entry encoded with BASE64\" with title \"BitBar Clipboard BASE64-Encoder\"" &> /dev/null
   exit
 fi
@@ -27,4 +27,4 @@ fi
 # Print icon
 echo "🔏"
 echo "---"
-echo "Encode clipboard item with BASE64 | bash=$0 param1=encode terminal=false"
+echo "Encode clipboard item with BASE64 | bash='$0' param1=encode terminal=false"

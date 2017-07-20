@@ -1,5 +1,5 @@
-#!/usr/bin/env /usr/local/bin/node
-
+#!/usr/bin/env node
+// jshint asi:true
 // <bitbar.title>GITLAB projects</bitbar.title>
 // <bitbar.version>v1.0</bitbar.version>
 // <bitbar.author>Sylvain Baronnet</bitbar.author>
@@ -7,8 +7,8 @@
 // <bitbar.desc>List of your last active projects</bitbar.desc>
 // <bitbar.dependencies>node.js</bitbar.dependencies>
 // <bitbar.image>http://i.imgur.com/4X40XIK.png</bitbar.image>
-var http = require('http');
 
+var https         = false;
 var gitlab_domain = '';
 var private_token = '';
 var default_page  = '/activity';
@@ -25,7 +25,7 @@ var options = {
 console.log('GITLAB');
 console.log('---');
 
-var request = http.get(options, function (res) {
+var request_callback = function(res) {
   var body = ''
   res.on('data', function (data) {
     body += data
@@ -45,10 +45,17 @@ var request = http.get(options, function (res) {
       console.log(name + ' ⤏ ' + P.open_issues_count + ' issue' + (P.open_issues_count > 1 ? 's' : '') + ' | alternate=true href="' + web_url + '/issues" size=' + font_size);
     }
   })
-});
+};
+
+var request;
+
+if (https) {
+  request = require('https').get(options, request_callback);
+} else {
+  request = require('http').get(options, request_callback);
+}
 
 request.end();
-
 
 /* Source : https://github.com/digplan/time-ago */
 var timeago = function() {
@@ -74,7 +81,8 @@ var timeago = function() {
       if(ts < 0) {
         return 'Just now';
       }
-    for (i in o) {
+
+    for (var i in o) {
       if (r(ts) < o[i]) return pl(ii || 'm', r(ts / (o[ii] || 1)))
       ii = i;
     }
